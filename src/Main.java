@@ -1,19 +1,19 @@
 public class Main {
     public static void main(String[] args) {
 
-        Product apple = new Product("Apple", 0.5, 20, "Fruits");
-        Customer customer = new Customer("Ali", 1, 20.0);
+        Sale sale = new Sale("My Grocery Store");
+        Customer customer = new Customer("Alex");
 
-        Sale sale = new Sale(apple, customer, 5);
+        Product p1 = new Product("Bread", 150);
+        Product p2 = new Product("Milk", 300);
+        Product p3 = new Product();
 
-        if (sale.processSale()) {
-            System.out.println("Sale successful!");
-        } else {
-            System.out.println("Sale failed!");
-        }
+        p3.setPrice(500);
 
-        System.out.println("Remaining quantity: " + apple.getQuantity());
-        System.out.println("Customer balance: " + customer.getBalance());
-        System.out.println("Loyalty points: " + customer.getLoyaltyPoints());
+        System.out.println(sale.getSaleName());
+        System.out.println(customer);
+        sale.showProduct(p1);
+        sale.showProduct(p2);
+        sale.showProduct(p3);
     }
 }

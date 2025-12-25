@@ -1,36 +1,16 @@
 public class Customer {
 
-    private String name;
-    private int id;
-    private double balance;
-    private int loyaltyPoints;
+    private String customerName;
 
-    public Customer(String name, int id, double balance) {
-        this.name = name;
-        this.id = id;
-        this.balance = balance;
-        this.loyaltyPoints = 0;
+    public Customer(String customerName) {
+        this.customerName = customerName;
     }
 
-    public String getName() {
-        return name;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public boolean pay(double amount) {
-        if (amount <= balance) {
-            balance -= amount;
-            loyaltyPoints += 10;
-            return true;
-        }
-        return false;
-    }
-
-    public int getLoyaltyPoints() {
-        return loyaltyPoints;
+    public String toString() {
+        return "Customer: " + customerName;
     }
 }
-

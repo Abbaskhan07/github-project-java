@@ -1,45 +1,33 @@
 public class Product {
 
     private String name;
-    private double price;
-    private int quantity;
-    private String category;
+    private int price;
 
-    public Product(String name, double price, int quantity, String category) {
+    public Product() {
+        this.name = "Unknown";
+        this.price = 0;
+    }
+
+    public Product(String name, int price) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
-        this.category = category;
     }
 
     public String getName() {
         return name;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setPrice(double price) {
-        if (price > 0) {
+    public void setPrice(int price) {
+        if (price >= 0) {
             this.price = price;
         }
     }
 
-    public boolean sell(int amount) {
-        if (amount <= quantity) {
-            quantity -= amount;
-            return true;
-        }
-        return false;
-    }
-
-    public double getTotalValue() {
-        return price * quantity;
+    public String toString() {
+        return name + " - " + price + " tg";
     }
 }
-
