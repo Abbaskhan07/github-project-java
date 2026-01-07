@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
 
@@ -36,5 +37,22 @@ public class Main {
         System.out.println("Ali VIP: " + c1.isVIP());
 
         System.out.println("\n=== Program Complete ===");
+
+        System.out.println("\n--- STAFF POLYMORPHISM ---");
+
+        ArrayList<Staff> staffList = new ArrayList<>();
+
+        staffList.add(new Cashier(1, "Omar", 200000, 3));
+        staffList.add(new Manager(2, "Aida", 350000, 5));
+
+        for (Staff s : staffList) {
+            System.out.println(s.work());
+
+            if (s instanceof Manager) {
+                Manager m = (Manager) s;
+                System.out.println("This is a manager");
+            }
+        }
+
     }
 }
