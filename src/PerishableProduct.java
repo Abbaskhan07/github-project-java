@@ -7,8 +7,8 @@ public class PerishableProduct extends Product {
     }
 
     @Override
-    public void display() { // Переопределение метода
+    public void display() {
         super.display();
-        System.out.println("      └─ ⏳ Срок годности: " + expiryDate);
+        System.out.println("    Срок годности: " + expiryDate);
     }
 }

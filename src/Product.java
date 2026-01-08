@@ -7,7 +7,7 @@ public class Product {
     public Product(int id, String name, double price, int quantity) {
         this.id = id;
         this.name = name;
-        setPrice(price); // Валидация через сеттер
+        setPrice(price);
         setQuantity(quantity);
     }
 
@@ -22,7 +22,7 @@ public class Product {
     public String getName() { return name; }
     public double getPrice() { return price; }
 
-    // Метод для полиморфизма
+
     public void display() {
         System.out.printf("[Товар] ID: %d | %-12s | Цена: %.2f | Кол-во: %d%n", id, name, price, quantity);
     }

@@ -14,8 +14,8 @@ public class Main {
         customers.add(new VIPCustomer(102, "Алия", 25000, 0.15));
 
         while (true) {
-            System.out.println("\n--- 🛒 СИСТЕМА УПРАВЛЕНИЯ МАГАЗИНОМ ---");
-            System.out.println("1. Показать все товары (Полиморфизм)");
+            System.out.println("\n---  СИСТЕМА УПРАВЛЕНИЯ МАГАЗИНОМ ---");
+            System.out.println("1. Показать все товары ");
             System.out.println("2. Показать всех клиентов");
             System.out.println("3. Добавить обычный товар");
             System.out.println("4. Добавить скоропортящийся товар");
@@ -30,11 +30,11 @@ public class Main {
 
             switch (choice) {
                 case 1 -> {
-                    System.out.println("\n📦 ТОВАРЫ В НАЛИЧИИ:");
+                    System.out.println("\n ТОВАРЫ В НАЛИЧИИ:");
                     for (Product p : inventory) p.display();
                 }
                 case 2 -> {
-                    System.out.println("\n👥 БАЗА КЛИЕНТОВ:");
+                    System.out.println("\n БАЗА КЛИЕНТОВ:");
                     for (Customer c : customers) c.showInfo();
                 }
                 case 3 -> addProduct(false);
@@ -43,9 +43,9 @@ public class Main {
                     System.out.print("Имя: "); String name = scanner.nextLine();
                     System.out.print("Скидка (например, 0,1): "); double d = scanner.nextDouble();
                     customers.add(new VIPCustomer(customers.size()+1, name, 0, d));
-                    System.out.println("✅ VIP добавлен!");
+                    System.out.println(" VIP добавлен!");
                 }
-                default -> System.out.println("❌ Ошибка выбора!");
+                default -> System.out.println(" Ошибка выбора!");
             }
         }
         System.out.println("Программа завершена.");
@@ -62,6 +62,6 @@ public class Main {
         } else {
             inventory.add(new Product(inventory.size()+1, name, price, qty));
         }
-        System.out.println("✅ Товар успешно добавлен!");
+        System.out.println(" Товар успешно добавлен!");
     }
 }
