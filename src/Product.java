@@ -1,69 +1,29 @@
 public class Product {
-
-    private int productId;
+    private int id;
     private String name;
     private double price;
-    private int stockQuantity;
+    private int quantity;
 
-    public Product(int productId, String name, double price, int stockQuantity) {
-        this.productId = productId;
+    public Product(int id, String name, double price, int quantity) {
+        this.id = id;
         this.name = name;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-    }
-
-    public Product() {
-        this.productId = 0;
-        this.name = "Unknown";
-        this.price = 0.0;
-        this.stockQuantity = 0;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
+        setPrice(price); // Валидация через сеттер
+        setQuantity(quantity);
     }
 
     public void setPrice(double price) {
-        this.price = price;
+        this.price = (price >= 0) ? price : 0;
     }
 
-    public int getStockQuantity() {
-        return stockQuantity;
+    public void setQuantity(int quantity) {
+        this.quantity = (quantity >= 0) ? quantity : 0;
     }
 
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
+    public String getName() { return name; }
+    public double getPrice() { return price; }
 
-    public boolean isInStock() {
-        return stockQuantity > 0;
-    }
-
-    public void restock(int amount) {
-        stockQuantity += amount;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{id=" + productId +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", stock=" + stockQuantity + '}';
+    // Метод для полиморфизма
+    public void display() {
+        System.out.printf("[Товар] ID: %d | %-12s | Цена: %.2f | Кол-во: %d%n", id, name, price, quantity);
     }
 }
