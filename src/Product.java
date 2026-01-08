@@ -6,10 +6,10 @@ public class Product {
     private int stockQuantity;
 
     public Product(int productId, String name, double price, int stockQuantity) {
-        setProductId(productId);
-        setName(name);
-        setPrice(price);
-        setStockQuantity(stockQuantity);
+        this.productId = productId;
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
     }
 
     public Product() {
@@ -24,11 +24,7 @@ public class Product {
     }
 
     public void setProductId(int productId) {
-        if (productId > 0) {
-            this.productId = productId;
-        } else {
-            this.productId = 0;
-        }
+        this.productId = productId;
     }
 
     public String getName() {
@@ -36,11 +32,7 @@ public class Product {
     }
 
     public void setName(String name) {
-        if (name != null && !name.isEmpty()) {
-            this.name = name;
-        } else {
-            this.name = "Unknown";
-        }
+        this.name = name;
     }
 
     public double getPrice() {
@@ -48,11 +40,7 @@ public class Product {
     }
 
     public void setPrice(double price) {
-        if (price >= 0) {
-            this.price = price;
-        } else {
-            this.price = 0;
-        }
+        this.price = price;
     }
 
     public int getStockQuantity() {
@@ -60,11 +48,7 @@ public class Product {
     }
 
     public void setStockQuantity(int stockQuantity) {
-        if (stockQuantity >= 0) {
-            this.stockQuantity = stockQuantity;
-        } else {
-            this.stockQuantity = 0;
-        }
+        this.stockQuantity = stockQuantity;
     }
 
     public boolean isInStock() {
@@ -72,9 +56,7 @@ public class Product {
     }
 
     public void restock(int amount) {
-        if (amount > 0) {
-            stockQuantity += amount;
-        }
+        stockQuantity += amount;
     }
 
     @Override
