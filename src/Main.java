@@ -7,7 +7,7 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // Инициализация тестовых данных (Требование Week 3)
+
         inventory.add(new Product(1, "Хлеб", 150, 20));
         inventory.add(new PerishableProduct(2, "Молоко", 480, 10, "2024-12-30"));
         customers.add(new Customer(101, "Арман", 5000));
