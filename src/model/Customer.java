@@ -34,7 +34,7 @@ public abstract class Customer {
 
     public String getName() { return name; }
 
-    public abstract double getDiscount();  // Abstract method for child classes
+    public abstract double getDiscount();
 
     public void showInfo() {
         System.out.printf("[Клиент] ID: %d | Имя: %-10s | Покупки: %.2f KZT%n", id, name, totalSpent);

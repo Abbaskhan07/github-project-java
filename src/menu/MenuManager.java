@@ -13,7 +13,7 @@ public class MenuManager implements Menu {
     public static void runSystem() {
         Scanner scanner = new Scanner(System.in);
         MenuManager menuManager = new MenuManager();
-        // Sample data initialization
+
         try {
             inventory.add(new Product(1, "Хлеб", 150, 20) {
                 @Override

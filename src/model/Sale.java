@@ -36,7 +36,7 @@ public class Sale {
         System.out.println("Чек #" + saleId + " от " + date + " на сумму: " + amount + " KZT");
     }
 
-    // Additional method for validation/business logic
+
     public void validateSale() {
         if (amount == 0) {
             throw new IllegalStateException("Sale amount cannot be zero");

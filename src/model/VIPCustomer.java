@@ -26,7 +26,7 @@ public class VIPCustomer extends Customer {
         return discountRate;
     }
 
-    // Additional method for business logic
+
     public void applyDiscount(double amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount cannot be negative");

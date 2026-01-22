@@ -44,7 +44,7 @@ public abstract class Product {
     public String getName() { return name; }
     public double getPrice() { return price; }
 
-    public abstract boolean isAvailable();  // Abstract method for child classes
+    public abstract boolean isAvailable();
 
     public void display() {
         System.out.printf("[Товар] ID: %d | %-12s | Цена: %.2f | Кол-во: %d%n", id, name, price, quantity);

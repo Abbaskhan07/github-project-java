@@ -23,13 +23,13 @@ public class PerishableProduct extends Product {
 
     @Override
     public boolean isAvailable() {
-        // Example business logic: check if not expired (simplified)
-        return quantity > 0 && !expiryDate.equals("expired");  // Can be enhanced with date parsing
+
+        return quantity > 0 && !expiryDate.equals("expired");
     }
 
-    // Additional method for validation/business logic
+
     public void checkExpiry() {
-        if (expiryDate.equals("expired")) {  // Placeholder for real date check
+        if (expiryDate.equals("expired")) {
             throw new IllegalStateException("Product is expired");
         }
         System.out.println("Product is still valid until " + expiryDate);
