@@ -33,6 +33,7 @@ public class MenuManager implements Menu {
         } catch (IllegalArgumentException e) {
             System.out.println("Error initializing data: " + e.getMessage());
         }
+
         while (true) {
             menuManager.displayOptions();
             int choice = scanner.nextInt();
@@ -63,7 +64,8 @@ public class MenuManager implements Menu {
     }
 
     @Override
-    public void handleInput(int choice, ArrayList<Product> inventory, ArrayList<Customer> customers, ArrayList<Sale> sales) throws IllegalArgumentException {
+    public void handleInput(int choice, ArrayList<Product> inventory, ArrayList<Customer> customers, ArrayList<Sale> sales)
+            throws IllegalArgumentException {
         if (choice < 0 || choice > 7) {
             throw new IllegalArgumentException("Invalid menu choice: " + choice);
         }
@@ -143,13 +145,17 @@ public class MenuManager implements Menu {
     private void addProduct(boolean perishable, ArrayList<Product> inventory) {
         System.out.print("Название: ");
         String name = scanner.nextLine();
+
         System.out.print("Цена: ");
         double price = scanner.nextDouble();
+
         System.out.print("Количество: ");
         int qty = scanner.nextInt();
+
         scanner.nextLine();
         if (perishable) {
-            System.out.print("Дата (ГГГГ-ММ-ДД): "); String date = scanner.nextLine();
+            System.out.print("Дата (ГГГГ-ММ-ДД): ");
+            String date = scanner.nextLine();
             inventory.add(new PerishableProduct(inventory.size() + 1, name, price, qty, date));
         } else {
             inventory.add(new Product(inventory.size() + 1, name, price, qty) {

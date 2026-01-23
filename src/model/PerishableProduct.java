@@ -1,6 +1,6 @@
 package model;
 
-public class PerishableProduct extends Product {
+public class PerishableProduct extends Product implements Perishable {
     private String expiryDate;
 
     public PerishableProduct(int id, String name, double price, int quantity, String expiryDate) {
