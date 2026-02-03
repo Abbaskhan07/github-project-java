@@ -169,8 +169,10 @@ public class MenuManager implements Menu {
     private void addVIPCustomer(ArrayList<Customer> customers) {
         System.out.print("Имя: ");
         String name = scanner.nextLine();
+
         System.out.print("Скидка (например, 0,1): ");
         double d = scanner.nextDouble();
+
         customers.add(new VIPCustomer(customers.size() + 1, name, 0, d));
         System.out.println(" VIP добавлен!");
     }

@@ -49,4 +49,20 @@ public abstract class Staff {
         System.out.printf("Staff ID: %d | Name: %s | Salary: %.2f | Experience: %d years | Role: %s\n",
                 staffId, name, salary, experienceYears, getRole());
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public int getExperienceYears() {
+        return experienceYears;
+    }
+
+
+
+
 }
