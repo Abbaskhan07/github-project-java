@@ -15,6 +15,10 @@ public class Manager extends Staff {
         this.teamSize = teamSize;
     }
 
+    public int getTeamSize() {  // Добавь это
+        return teamSize;
+    }
+
     @Override
     public void work() {
         System.out.println("Manager " + name + " is overseeing " + teamSize + " staff.");

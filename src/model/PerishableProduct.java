@@ -17,14 +17,13 @@ public class PerishableProduct extends Product implements Perishable {
 
     @Override
     public void display() {
-        super.display();
         System.out.println("    Срок годности: " + expiryDate);
     }
 
     @Override
     public boolean isAvailable() {
 
-        return quantity > 0 && !expiryDate.equals("expired");
+        return getQuantity() > 0 && !expiryDate.equals("expired");
     }
 
 

@@ -63,6 +63,11 @@ public abstract class Staff {
     }
 
 
+    public int getStaffId() {
+        return staffId;
+    }
+
+
 
 
 }
