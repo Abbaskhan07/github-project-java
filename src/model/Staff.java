@@ -14,7 +14,7 @@ public abstract class Staff {
     }
 
     public void setStaffId(int staffId) {
-        if (staffId <= 0) {
+        if (staffId < 0) {
             throw new IllegalArgumentException("Staff ID must be positive");
         }
         this.staffId = staffId;

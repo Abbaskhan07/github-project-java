@@ -38,15 +38,15 @@ public abstract class Product implements Available {
         this.quantity = quantity;
     }
 
-    public abstract void display(); // Абстрактный метод для полиморфизма
+    public abstract void display();
 }
 
-// Интерфейс для Week 6
+
 interface Available {
     boolean isAvailable();
 }
 
-// Второй интерфейс (для customers или продуктов, если нужно)
+
 interface Discountable {
     double getDiscount();
 }

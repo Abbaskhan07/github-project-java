@@ -7,22 +7,21 @@ import Database.StaffDAO;
 import model.Customer;
 import model.Sale;
 import model.Staff;
-import model.Manager; // Assume your child class
+import model.Manager;
 
 public class MenuManager {
 
     private StaffDAO staffDAO = new StaffDAO();
 
-    private static ArrayList<Customer> customers = new ArrayList<>(); // Keep for customers, add DAO if needed
-
-    private static ArrayList<Sale> sales = new ArrayList<>(); // Keep, add DAO if needed
+    private static ArrayList<Customer> customers = new ArrayList<>();
+    private static ArrayList<Sale> sales = new ArrayList<>();
 
     private Scanner scanner = new Scanner(System.in);
 
     public static void runSystem() {
         MenuManager menuManager = new MenuManager();
 
-        // Initialization moved to DB if needed
+
 
         while (true) {
             menuManager.displayOptions();
@@ -64,18 +63,18 @@ public class MenuManager {
         }
         switch (choice) {
             case 1:
-                // View products - add ProductDAO if needed
+
                 System.out.println("View products placeholder");
                 break;
             case 2:
                 viewAllCustomers();
                 break;
             case 3:
-                // Add regular product - add ProductDAO
+
                 System.out.println("Add regular product placeholder");
                 break;
             case 4:
-                // Add perishable - add ProductDAO
+
                 System.out.println("Add perishable product placeholder");
                 break;
             case 5:
@@ -123,14 +122,14 @@ public class MenuManager {
     }
 
     private void addVIPCustomer() {
-        // Existing code
+
     }
 
     private void viewAllSales() {
-        // Existing code
+
     }
 
-    // New methods for staff
+
     private void viewAllStaff() {
         List<Staff> staff = staffDAO.getAllStaff();
         if (staff.isEmpty()) {

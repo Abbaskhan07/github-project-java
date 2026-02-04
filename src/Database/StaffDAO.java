@@ -1,248 +1,223 @@
 package Database;
 
-import Database.DatabaseConnection; // Assume this package
+import model.Manager;
 import model.Staff;
-import model.Manager; // Assume Manager is your child class; replace with Chef/Waiter if needed
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StaffDAO {
 
-    // Existing methods from Week 7 (assume they exist)
+
     public boolean insertStaff(Staff staff) {
-        String sql = "INSERT INTO staff (name, salary, staff_type, experience_years) VALUES (?, ?, 'MANAGER', ?)"; // Adjust for Manager
+        String sql = "INSERT INTO staff (name, salary, experience_years, staff_type, team_size) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return false;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return false;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, staff.getName());
-            statement.setDouble(2, staff.getSalary());
-            statement.setInt(3, staff.getExperienceYears());
-            // Add more for specialization or other fields if Manager has them
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, staff.getName());
+            ps.setDouble(2, staff.getSalary());
+            ps.setInt(3, staff.getExperienceYears());
+            ps.setString(4, staff.getRole());                     // 'Manager'
 
-            int rowsInserted = statement.executeUpdate();
-            statement.close();
-            return rowsInserted > 0;
+            if (staff instanceof Manager m) {
+                ps.setInt(5, m.getTeamSize());
+            } else {
+                ps.setNull(5, Types.INTEGER);
+            }
+
+            int rows = ps.executeUpdate();
+            System.out.println(rows > 0 ? "✓ Staff inserted" : "✗ Insert failed");
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
-        return false;
     }
+
 
     public List<Staff> getAllStaff() {
-        List<Staff> staffList = new ArrayList<>();
-        String sql = "SELECT * FROM staff";
+        List<Staff> list = new ArrayList<>();
+        String sql = "SELECT * FROM staff ORDER BY salary DESC";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return staffList;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return list;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("staff_id");
-                String name = resultSet.getString("name");
-                double salary = resultSet.getDouble("salary");
-                int exp = resultSet.getInt("experience_years");
-                // Add more fields
-
-                Manager manager = new Manager(id, name, salary, exp, 0); // Adjust
-                staffList.add(manager);
+            while (rs.next()) {
+                Staff s = extractStaffFromResultSet(rs);
+                if (s != null) list.add(s);
             }
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
-        return staffList;
+        return list;
     }
+
 
     public Staff getStaffById(int id) {
         String sql = "SELECT * FROM staff WHERE staff_id = ?";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return null;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return null;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                String name = resultSet.getString("name");
-                double salary = resultSet.getDouble("salary");
-                int exp = resultSet.getInt("experience_years");
-                // Add more
-
-                Manager manager = new Manager(id, name, salary, exp, 0); // Adjust
-                return manager;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return extractStaffFromResultSet(rs);
             }
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
         return null;
     }
 
-    // New for Week 8: UPDATE
+
     public boolean updateStaff(Staff staff) {
-        String sql = "UPDATE staff SET name = ?, salary = ?, experience_years = ? WHERE staff_id = ?";
+        String sql = "UPDATE staff SET name = ?, salary = ?, experience_years = ?, team_size = ? " +
+                "WHERE staff_id = ?";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return false;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return false;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, staff.getName());
-            statement.setDouble(2, staff.getSalary());
-            statement.setInt(3, staff.getExperienceYears());
-            statement.setInt(4, staff.getStaffId());
-            // Add more fields if needed
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, staff.getName());
+            ps.setDouble(2, staff.getSalary());
+            ps.setInt(3, staff.getExperienceYears());
 
-            int rowsUpdated = statement.executeUpdate();
-            statement.close();
-            return rowsUpdated > 0;
+            if (staff instanceof Manager m) {
+                ps.setInt(4, m.getTeamSize());
+            } else {
+                ps.setNull(4, Types.INTEGER);
+            }
+
+            ps.setInt(5, staff.getStaffId());
+
+            int rows = ps.executeUpdate();
+            System.out.println(rows > 0 ? "✓ Staff updated" : "✗ Update failed");
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
-        return false;
     }
 
-    // New for Week 8: DELETE
-    public boolean deleteStaff(int staffId) {
+
+    public boolean deleteStaff(int id) {
         String sql = "DELETE FROM staff WHERE staff_id = ?";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return false;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return false;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, staffId);
-
-            int rowsDeleted = statement.executeUpdate();
-            statement.close();
-            return rowsDeleted > 0;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            int rows = ps.executeUpdate();
+            System.out.println(rows > 0 ? "✓ Staff deleted" : "✗ No staff with this ID");
+            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
-        return false;
     }
 
-    // New for Week 8: Search by Name
+
     public List<Staff> searchByName(String name) {
-        List<Staff> staffList = new ArrayList<>();
-        String sql = "SELECT * FROM staff WHERE name ILIKE ?";
+        List<Staff> list = new ArrayList<>();
+        String sql = "SELECT * FROM staff WHERE name ILIKE ? ORDER BY name";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return staffList;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return list;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, "%" + name + "%");
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("staff_id");
-                String sName = resultSet.getString("name");
-                double salary = resultSet.getDouble("salary");
-                int exp = resultSet.getInt("experience_years");
-                // Add more
-
-                Manager manager = new Manager(id, sName, salary, exp, 0); // Adjust
-                staffList.add(manager);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Staff s = extractStaffFromResultSet(rs);
+                    if (s != null) list.add(s);
+                }
             }
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
-        return staffList;
+        return list;
     }
 
-    // New for Week 8: Search by Salary Range
     public List<Staff> searchBySalaryRange(double min, double max) {
-        List<Staff> staffList = new ArrayList<>();
+        List<Staff> list = new ArrayList<>();
         String sql = "SELECT * FROM staff WHERE salary BETWEEN ? AND ? ORDER BY salary DESC";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return staffList;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return list;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setDouble(1, min);
-            statement.setDouble(2, max);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("staff_id");
-                String name = resultSet.getString("name");
-                double salary = resultSet.getDouble("salary");
-                int exp = resultSet.getInt("experience_years");
-                // Add more
-
-                Manager manager = new Manager(id, name, salary, exp, 0); // Adjust
-                staffList.add(manager);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, min);
+            ps.setDouble(2, max);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Staff s = extractStaffFromResultSet(rs);
+                    if (s != null) list.add(s);
+                }
             }
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
-        return staffList;
+        return list;
     }
 
-    // New for Week 8: Search by Min Salary
-    public List<Staff> searchByMinSalary(double minSalary) {
-        List<Staff> staffList = new ArrayList<>();
+    public List<Staff> searchByMinSalary(double min) {
+        List<Staff> list = new ArrayList<>();
         String sql = "SELECT * FROM staff WHERE salary >= ? ORDER BY salary DESC";
 
-        Connection connection = DatabaseConnection.getConnection();
-        if (connection == null) return staffList;
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) return list;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setDouble(1, minSalary);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("staff_id");
-                String name = resultSet.getString("name");
-                double salary = resultSet.getDouble("salary");
-                int exp = resultSet.getInt("experience_years");
-                // Add more
-
-                Manager manager = new Manager(id, name, salary, exp, 0); // Adjust
-                staffList.add(manager);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, min);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Staff s = extractStaffFromResultSet(rs);
+                    if (s != null) list.add(s);
+                }
             }
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DatabaseConnection.closeConnection(connection);
+            DatabaseConnection.closeConnection(conn);
         }
-        return staffList;
+        return list;
+    }
+
+
+    private Staff extractStaffFromResultSet(ResultSet rs) throws SQLException {
+        int id = rs.getInt("staff_id");
+        String name = rs.getString("name");
+        double salary = rs.getDouble("salary");
+        int exp = rs.getInt("experience_years");
+        String type = rs.getString("staff_type");
+        int teamSize = rs.getInt("team_size");
+
+        if ("MANAGER".equalsIgnoreCase(type)) {
+            return new Manager(id, name, salary, exp, teamSize);
+        }
+
+        return null;
     }
 }
